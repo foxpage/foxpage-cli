@@ -1,0 +1,50 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "tsconfigRootDir": "./",
+    "ecmaVersion": 2019,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "extends": [
+    "eslint:recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "rules": {
+    "no-console": "off",
+    "no-case-declarations": "off",
+    "require-atomic-updates": "off",
+    "no-empty": ["error", {
+      "allowEmptyCatch": true
+    }],
+    "@typescript-eslint/no-unused-vars": ["off", {
+      "argsIgnorePattern": "^_"
+    }],
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-empty-function": ["off"],
+    "@typescript-eslint/camelcase": ["off"],
+    "@typescript-eslint/no-empty-interface": ["warn"],
+    "@typescript-eslint/indent": ["off"],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/array-type": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-object-literal-type-assertion": "off",
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/class-name-casing": "off"
+  }
+}

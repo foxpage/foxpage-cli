@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./lib",
+    "lib": [
+      "esnext",
+      "es7",
+      "dom"
+    ],
+    // editor
+    "charset": "utf-8",
+    "newLine": "LF",
+
+    // syntax
+    "strict": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+
+    // compile
+    "skipLibCheck": true,
+    "target": "ES2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "removeComments": false,
+    "declaration": true,
+    "useUnknownInCatchVariables": false,
+  },
+  "include": [
+    "src/**/*.ts",
+    "typings/*",
+  ],
+  "exclude": [
+    "node_modules",
+    "lib",
+    "dist",
+    "es",
+    "__mocks__/*",
+    "__mocks__/**/*",
+    ".cache",
+    "__*"
+  ]
+}
