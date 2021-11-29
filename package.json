@@ -23,6 +23,11 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
+  "homepage": "https://github.com/foxfamily/foxpage-cli",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/foxfamily/foxpage-cli"
+  },
   "scripts": {
     "prebuild": "rm -rf ./lib",
     "build": "tsc --skipLibCheck",
