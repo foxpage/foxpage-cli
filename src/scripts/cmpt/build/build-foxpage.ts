@@ -6,7 +6,7 @@ import filenamify from 'filenamify';
 import { logger } from '@foxpage/foxpage-component-shared';
 import { buildWebpackMode } from './worker';
 import { generateSchemaJson } from './compile-schema';
-import { FoxpageBuildOption, FoxpageBuildCompileOption } from './typing';
+import { FoxpageBuildOption, FoxpageBuildCompileOption, FoxpageJson } from './typing';
 import { createWorker } from '../../../worker/master';
 import { getCompileOption } from './compile-option';
 
@@ -55,11 +55,32 @@ const buildTsSchema = async (context: string, compileOption: FoxpageBuildCompile
 
 const handleFoxpageStatic = async (context: string, compileOption: FoxpageBuildCompileOption) => {
   logger.info('generate foxpage.json...');
-  const { generateFoxpageJson, foxpageData: foxpageJson = {} } = compileOption;
+  const { generateFoxpageJson, foxpageData } = compileOption;
+  const { name: pkgName, version: pkgVersion, foxpage: pkgFoxpage = {} } = foxpageData || ({} as FoxpageJson);
+  const {
+    name = pkgName,
+    publicPath,
+    meta = {},
+    disableContainer = false,
+    dependencies = [],
+    editors = [],
+  } = pkgFoxpage;
+  const foxpageJson = {
+    name: pkgName,
+    version: pkgVersion,
+    foxpage: {
+      name,
+      publicPath,
+      meta,
+      disableContainer,
+      dependencies,
+      editors,
+    },
+  };
   // generate foxpage.json
   if (generateFoxpageJson) {
     await fs
-      .writeJson(join(context, 'dist/foxpage.json'), foxpageJson || {})
+      .writeJson(join(context, 'dist/foxpage.json'), foxpageJson)
       .then(() => {
         logger.success('generate foxpage.json...');
       })

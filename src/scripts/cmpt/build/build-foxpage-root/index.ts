@@ -5,6 +5,7 @@ import { logger } from '@foxpage/foxpage-component-shared';
 import { FoxpageBuildOption } from '../typing';
 import {
   generateDistPackageHashMap,
+  generateFoxpagesJson,
   generatePackagesData,
   generatePackagesDist,
   generatePackagesPath,
@@ -93,6 +94,9 @@ const buildFoxpageRoot = async (option: FoxpageBuildOption) => {
       concurrency,
     },
   );
+  // generate foxpages.json
+  await generateFoxpagesJson({ context });
+
   // generate new dist packages hash file
   await fs
     .outputJSON(join(context, Constants.rootCacheFilePath), newDistPackageHashMap, {

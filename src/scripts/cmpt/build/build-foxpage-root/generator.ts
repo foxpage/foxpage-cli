@@ -237,3 +237,41 @@ export const generatePackagesDist = async ({
     pkgBuildStatusMap: resultMap,
   };
 };
+
+// generate foxpages.json
+export const generateFoxpagesJson = async ({ context }: { context: string }) => {
+  const packageJsonPaths = await globby(`${Constants.rootDistComponentPath}/*/foxpage.json`, {
+    cwd: context,
+    absolute: true,
+  });
+  const rootFoxpageInfo = await fs
+    .readJSON(join(context, 'package.json'))
+    .then(pkg => pkg.foxpage || {})
+    .catch(() => ({}));
+  const foxpagesJson = {
+    ...rootFoxpageInfo,
+    packages: [],
+  };
+  packageJsonPaths.forEach((foxpageJsonPath: string) => {
+    try {
+      const foxpageJson = fs.readJSONSync(foxpageJsonPath);
+      if (foxpageJson) {
+        foxpagesJson.packages.push(foxpageJson);
+      } else {
+        logger.error(`Can't find the "${foxpageJsonPath}"`);
+      }
+    } catch (e) {
+      logger.error(`Can't get foxpage into from "${foxpageJsonPath}" file.`);
+      console.error(e);
+    }
+  });
+  await fs
+    .writeJson(`${Constants.rootDistPath}/foxpages.json`, foxpagesJson)
+    .then(() => {
+      logger.success('generate foxpages.json');
+    })
+    .catch(err => {
+      logger.error('generate foxpages.json');
+      console.error(err);
+    });
+};

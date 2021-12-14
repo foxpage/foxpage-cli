@@ -38,10 +38,13 @@ export interface FoxpageJson {
   version: string;
   isPrivate?: boolean;
   foxpage: {
+    name?: string;
     publicPath?: string;
     meta?: Record<string, any>;
     ignore?: boolean;
     disableContainer?: boolean;
+    dependencies?: (string | Record<string, any>)[];
+    editors?: (string | Record<string, any>)[];
   };
 }
 
