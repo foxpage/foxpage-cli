@@ -23,6 +23,7 @@ export interface FoxpageBuildOption {
   progressPlugin?: boolean;
   analyze?: boolean;
   minimize?: boolean;
+  generateFoxpageJson?: boolean;
   zipFox?: boolean;
   // used for lib es
   babelOptions?: string;
@@ -38,6 +39,7 @@ export interface FoxpageJson {
   isPrivate?: boolean;
   foxpage: {
     publicPath?: string;
+    meta?: Record<string, any>;
     ignore?: boolean;
     disableContainer?: boolean;
   };

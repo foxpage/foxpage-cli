@@ -9,7 +9,6 @@ import { generateSchemaJson } from './compile-schema';
 import { FoxpageBuildOption, FoxpageBuildCompileOption } from './typing';
 import { createWorker } from '../../../worker/master';
 import { getCompileOption } from './compile-option';
-import { isEmptyObject } from '../../../utils/polyfill-object';
 
 const buildFoxpage = async (option: FoxpageBuildOption) => {
   logger.info('start build for foxpage');
@@ -56,11 +55,11 @@ const buildTsSchema = async (context: string, compileOption: FoxpageBuildCompile
 
 const handleFoxpageStatic = async (context: string, compileOption: FoxpageBuildCompileOption) => {
   logger.info('generate foxpage.json...');
-  const foxpageJson = compileOption.foxpageData.foxpage;
+  const { generateFoxpageJson, foxpageData: foxpageJson = {} } = compileOption;
   // generate foxpage.json
-  if (foxpageJson && !isEmptyObject(foxpageJson)) {
+  if (generateFoxpageJson) {
     await fs
-      .writeJson(join(context, 'dist/foxpage.json'), foxpageJson)
+      .writeJson(join(context, 'dist/foxpage.json'), foxpageJson || {})
       .then(() => {
         logger.success('generate foxpage.json...');
       })

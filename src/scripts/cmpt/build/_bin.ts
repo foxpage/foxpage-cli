@@ -46,6 +46,8 @@ program
   .option('--file-hash', 'Build all files using the WebPack Contenthash parameter')
   .option('--progress-plugin', 'Use webpack.ProgressPlugin when webpack build')
   .option('--analyze', 'Analyze build result. can be used with "--modes production" (only support --foxpage)', false)
+  .option('--generate-foxpage-json', 'generate foxpage.json file', true)
+  .option('--on-generate-foxpage-json', 'disable generate foxpage.json file')
   .option(
     '--zip-fox',
     'Automatically compress build resources for the FoxPage component registration process, (only support --foxpage)',
