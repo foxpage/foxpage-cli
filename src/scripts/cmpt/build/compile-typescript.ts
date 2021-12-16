@@ -101,7 +101,11 @@ async function runTypescriptCompile(option: TypescriptCompileOption) {
   const tmpFilePathIns = generateTypescriptConfig(tsConfigFilePath, option);
 
   try {
-    execSync(`npx tsc --project ${tmpFilePathIns.filePath}`, {
+    let tsc = 'tsc';
+    try {
+      tsc = require.resolve('typescript/bin/tsc');
+    } catch (e) {}
+    execSync(`${tsc} --project ${tmpFilePathIns.filePath}`, {
       cwd: context,
       stdio: 'inherit',
     });
