@@ -58,7 +58,9 @@ const handleFoxpageStatic = async (context: string, compileOption: FoxpageBuildC
   const { generateFoxpageJson, foxpageData } = compileOption;
   const { name: pkgName, version: pkgVersion, foxpage: pkgFoxpage = {} } = foxpageData || ({} as FoxpageJson);
   const {
-    name = pkgName,
+    name,
+    version,
+    dirName,
     publicPath,
     meta = {},
     disableContainer = false,
@@ -69,7 +71,9 @@ const handleFoxpageStatic = async (context: string, compileOption: FoxpageBuildC
     name: pkgName,
     version: pkgVersion,
     foxpage: {
-      name,
+      name: name || pkgName,
+      version: version || pkgVersion,
+      dirName,
       publicPath,
       meta,
       disableContainer,

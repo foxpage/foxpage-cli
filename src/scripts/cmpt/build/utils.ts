@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { join } from 'path';
+import { join, basename } from 'path';
 import { logger } from '@foxpage/foxpage-component-shared';
 import { FoxpageJson } from './typing';
 
@@ -12,24 +12,19 @@ export const getPackageJsonPath = (packagePath: string) => {
 };
 
 export const getFoxpageData = async (context: string = process.cwd()): Promise<FoxpageJson> => {
+  const dirName = basename(context);
   const packageDataPath = getPackageJsonPath(context);
-  const foxpageDataPath = join(context, '.foxpage/foxpage.json');
   try {
     const { name, version, private: isPrivate = false, foxpage = {} } = fs.readJsonSync(packageDataPath);
-    let foxpageJson = {};
-    if (fs.existsSync(foxpageDataPath)) {
-      foxpageJson = await fs.readJson(foxpageDataPath).catch(e => {
-        logger.error(`Read "${foxpageDataPath}" error:\n`, e);
-        return {};
-      });
-    }
     return {
       name,
       version,
       isPrivate,
       foxpage: {
+        name,
+        version,
         ...foxpage,
-        ...foxpageJson,
+        dirName,
       },
     };
   } catch (e) {

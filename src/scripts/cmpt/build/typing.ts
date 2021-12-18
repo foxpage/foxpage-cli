@@ -39,6 +39,10 @@ export interface FoxpageJson {
   isPrivate?: boolean;
   foxpage: {
     name?: string;
+    version?: string;
+    // comp, editor
+    type?: string;
+    dirName?: string;
     publicPath?: string;
     meta?: Record<string, any>;
     ignore?: boolean;
