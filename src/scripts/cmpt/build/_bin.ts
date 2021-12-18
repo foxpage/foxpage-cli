@@ -43,6 +43,7 @@ program
     'Build modes, includes: "production,debug,node,editor", split by ",", (only support --foxpage)',
     v => v.split(','),
   )
+  .option('--manifest', 'generate manifest.json. used with --file-hash')
   .option('--file-hash', 'Build all files using the WebPack Contenthash parameter')
   .option('--progress-plugin', 'Use webpack.ProgressPlugin when webpack build')
   .option('--analyze', 'Analyze build result. can be used with "--modes production" (only support --foxpage)', false)

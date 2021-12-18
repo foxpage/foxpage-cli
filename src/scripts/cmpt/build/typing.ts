@@ -19,6 +19,7 @@ export interface FoxpageBuildOption {
   concurrency: number;
   // used for foxpage
   modes: BuildFoxpageMode[];
+  manifest?: boolean;
   fileHash?: boolean;
   progressPlugin?: boolean;
   analyze?: boolean;

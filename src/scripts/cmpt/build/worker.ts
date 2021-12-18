@@ -13,7 +13,7 @@ export const buildWebpackMode = async (mode: BuildFoxpageMode, context: string, 
 
   let config: Configuration | undefined;
   try {
-    const { fileHash, progressPlugin, foxpageData } = option;
+    const { manifest, fileHash, progressPlugin, foxpageData } = option;
     const { name, version, foxpage } = foxpageData;
     const { publicPath } = foxpage;
     const library = `${name}`;
@@ -21,6 +21,7 @@ export const buildWebpackMode = async (mode: BuildFoxpageMode, context: string, 
       library,
       version,
       publicPath,
+      useManifest: manifest,
       useFileHash: fileHash,
       useProgressPlugin: progressPlugin,
     });
