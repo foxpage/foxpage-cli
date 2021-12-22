@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.27](https://github.com/foxfamily/foxpage-cli/compare/v0.1.26...v0.1.27) (2021-12-22)
+
+
+### Bug Fixes
+
+* 🐛 add error catch for mode build ([c1fc234](https://github.com/foxfamily/foxpage-cli/commit/c1fc23441222093e22424b8de75e42c6294b36c2))
+
 ### [0.1.26](https://github.com/foxfamily/foxpage-cli/compare/v0.1.25...v0.1.26) (2021-12-18)
 
 
