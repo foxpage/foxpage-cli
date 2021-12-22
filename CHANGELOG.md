@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.28](https://github.com/foxfamily/foxpage-cli/compare/v0.1.27...v0.1.28) (2021-12-22)
+
+
+### Bug Fixes
+
+* 🐛 update foxpage-component-webpack to fix assets build err ([7f297b2](https://github.com/foxfamily/foxpage-cli/commit/7f297b207c77a094edbc6a184ae499459aa8104f))
+
 ### [0.1.27](https://github.com/foxfamily/foxpage-cli/compare/v0.1.26...v0.1.27) (2021-12-22)
 
 
