@@ -80,7 +80,7 @@
     "@babel/core": "^7.8.0",
     "@babel/polyfill": "^7.8.2",
     "@foxpage/foxpage-component-shared": "^0.1.12",
-    "@foxpage/foxpage-component-webpack": "^0.1.24",
+    "@foxpage/foxpage-component-webpack": "^0.1.25",
     "adm-zip": "^0.5.5",
     "autoprefixer": "^10.0.1",
     "chalk": "^4.1.1",
