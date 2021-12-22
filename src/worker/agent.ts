@@ -60,7 +60,6 @@ export class WorkerAgent extends EventEmitter {
       action: 'run',
       payload: ctx,
     };
-    this.emit('apply', msg);
     this._child.send(msg);
     const result: ResultMessage['payload'] = await new Promise(resolve => {
       this._child.once('message', (msg: ResultMessage) => {
@@ -69,6 +68,7 @@ export class WorkerAgent extends EventEmitter {
     });
     this.status = 'idle';
     this.emit('done', result);
+    return result;
   }
 
   destroy() {

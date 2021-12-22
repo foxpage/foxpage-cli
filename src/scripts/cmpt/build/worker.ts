@@ -39,5 +39,6 @@ export const buildWebpackMode = async (mode: BuildFoxpageMode, context: string, 
     } else {
       logger.error('  error:', error);
     }
+    throw error;
   }
 };

@@ -222,16 +222,19 @@ export const generatePackagesDist = async ({
     },
   );
   const resultMap: Record<string, boolean> = {};
+  logger.colorMsg('grey', '------[foxpage components build results:]------');
   result.forEach(item => {
     const { isSuc, name, colorName, message } = item;
     resultMap[name] = isSuc;
     if (isSuc) {
       logger.success(`FoxpageBuild ${colorName} succeed!`);
     } else {
-      logger.error(`FoxpageBuild ${colorName} fail!`);
+      logger.error(`FoxpageBuild ${colorName} fail: `);
       logger.error(message);
+      logger.error(`FoxpageBuild ${colorName} fail message end!`);
     }
   });
+  logger.colorMsg('grey', '------[foxpage components build results end]------');
   return {
     pkgBuildStatusList: result,
     pkgBuildStatusMap: resultMap,

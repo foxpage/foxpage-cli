@@ -6,6 +6,8 @@ type Fn = (...args: any[]) => any;
 
 export interface Job<T extends Fn> {
   pre?: () => void;
+  onSuc?: () => void;
+  onFail?: () => void;
   args: Parameters<T>;
 }
 
@@ -29,13 +31,22 @@ export class Master<T extends Fn> extends EventEmitter {
     const promises = this.jobs.map(async job => {
       const worker = await this.pool.getInstance();
       job.pre?.();
-      await worker.apply({
+      const result = await worker.apply({
         ...this.context,
         args: job.args,
       });
+      if (result.ok) {
+        job.onSuc?.();
+      } else {
+        job.onFail?.();
+      }
+      return {
+        ...result,
+        args: job.args,
+      };
     });
 
-    await Promise.all(promises);
+    return await Promise.all(promises);
   }
 
   destroy() {

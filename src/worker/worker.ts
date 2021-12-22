@@ -1,5 +1,5 @@
-import { ResultMessage, WorkMessage } from './interface';
 import { logger } from '@foxpage/foxpage-component-shared';
+import { ResultMessage, WorkMessage } from './interface';
 
 const debug = (msg: string, ...params: any[]) => {
   logger.debug(` <worker:${process.pid}> ${msg}`, ...params);
@@ -16,7 +16,7 @@ async function handleWorkerMessage(msg: WorkMessage) {
       const fn = require(payload.filename)[payload.exportName];
       if (typeof fn === 'function') {
         debug(`run work fn: "${fn.name}"`);
-        await fn(...payload.args);
+        return await fn(...payload.args);
       }
       break;
   }
@@ -36,7 +36,7 @@ process.on('message', (msg: WorkMessage) => {
       err => {
         const msg: ResultMessage = {
           action: 'result',
-          payload: { ok: false, message: String(err) },
+          payload: { ok: false, data: null, err },
           from: process.pid,
         };
         return msg;

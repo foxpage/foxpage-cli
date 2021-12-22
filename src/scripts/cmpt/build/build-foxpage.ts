@@ -40,8 +40,21 @@ const buildByModes = async (context: string, compileOption: FoxpageBuildCompileO
       });
     }
   });
-  await worker.run();
+  const resList = await worker.run();
   worker.destroy();
+  let success = true;
+  resList.forEach((res, ind) => {
+    const modeName = res.args?.[0] || targetModes[ind];
+    if (res.ok) {
+      logger.success(`build ${modeName} mode...`);
+    } else {
+      logger.error(`build ${modeName} mode fail!`);
+      success = false;
+    }
+  });
+  if (!success) {
+    process.exit(1);
+  }
   logger.success('build by modes success...');
 };
 
