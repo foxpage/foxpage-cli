@@ -59,11 +59,13 @@ const buildByModes = async (context: string, compileOption: FoxpageBuildCompileO
 };
 
 const buildTsSchema = async (context: string, compileOption: FoxpageBuildCompileOption) => {
-  await generateSchemaJson({
+  const schema = await generateSchemaJson({
     context,
     name: compileOption.foxpageData.name,
     output: join(context, 'dist/schema.json'),
   });
+  // set schema
+  compileOption.foxpageData.foxpage.schema = schema;
 };
 
 const handleFoxpageStatic = async (context: string, compileOption: FoxpageBuildCompileOption) => {
@@ -75,6 +77,7 @@ const handleFoxpageStatic = async (context: string, compileOption: FoxpageBuildC
     version,
     dirName,
     publicPath,
+    schema = {},
     meta = {},
     disableContainer = false,
     dependencies = [],
@@ -88,6 +91,7 @@ const handleFoxpageStatic = async (context: string, compileOption: FoxpageBuildC
       version: version || pkgVersion,
       dirName,
       publicPath,
+      schema,
       meta,
       disableContainer,
       dependencies,

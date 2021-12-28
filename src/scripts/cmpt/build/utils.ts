@@ -24,7 +24,9 @@ export const getFoxpageData = async (context: string = process.cwd()): Promise<F
         name,
         version,
         ...foxpage,
+        // force cover
         dirName,
+        schema: {},
       },
     };
   } catch (e) {

@@ -45,6 +45,7 @@ export interface FoxpageJson {
     type?: string;
     dirName?: string;
     publicPath?: string;
+    schema?: Record<string, any>;
     meta?: Record<string, any>;
     ignore?: boolean;
     disableContainer?: boolean;
