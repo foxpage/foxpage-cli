@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.29](https://github.com/foxfamily/foxpage-cli/compare/v0.1.28...v0.1.29) (2021-12-28)
+
+
+### Features
+
+* 🎸 foxpage.json add schema data ([7b00b02](https://github.com/foxfamily/foxpage-cli/commit/7b00b02492697c72d1907fd14d18abdba1ba313e))
+
 ### [0.1.28](https://github.com/foxfamily/foxpage-cli/compare/v0.1.27...v0.1.28) (2021-12-22)
 
 
