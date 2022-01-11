@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.30](https://github.com/foxpage/foxpage-cli/compare/v0.1.29...v0.1.30) (2022-01-11)
+
+
+### Features
+
+* 🎸 fetch support one repository create multi project ([fea439d](https://github.com/foxpage/foxpage-cli/commit/fea439da497cae53a87d16dac963957c0da48ddc))
+
+
+### Bug Fixes
+
+* 🐛 update config for foxpage to fetch ([2d1a9b8](https://github.com/foxpage/foxpage-cli/commit/2d1a9b8fc4c27f4ab12c44b9b891ddbff244dd79))
+
 ### [0.1.29](https://github.com/foxpage/foxpage-cli/compare/v0.1.28...v0.1.29) (2021-12-28)
 
 ### Features
