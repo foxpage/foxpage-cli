@@ -1,9 +1,8 @@
 const Config = {
-  boilerplateUrl: 'https://github.com/foxfamily/foxpage-component-boilerplate.git',
-  boilerplateZipUrl: 'https://github.com/foxfamily/foxpage-component-boilerplate/archive/main.zip',
+  boilerplateUrl: 'https://github.com/foxpage/foxpage-component-boilerplate.git',
+  boilerplateZipUrl: 'https://github.com/foxpage/foxpage-component-boilerplate/archive/main.zip',
   commandName: 'foxpage',
-  configHelpUri: 'http://docs.foxfamily.io',
-  mongoDBUrl: 'https://www.mongodb.com/try/download',
+  configHelpUri: 'http://www.foxpage.io/#/',
 };
 
 export default Config;

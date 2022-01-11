@@ -7,11 +7,11 @@ import * as InquirerHelper from '../../../utils/inquirer-helper';
 
 const main = async (name: string) => {
   const CWD = process.cwd();
-  // 判断是否需要用 'foxpage-component-' 开头
+  // check if need use 'foxpage-component-' prefix
   const isUsePrefix = await InquirerHelper.confirm("Does name use the 'foxpage-component' prefix?");
   const projectName = `${isUsePrefix ? 'foxpage-component-' : ''}${name}`;
   const projectPath = join(CWD, projectName);
-  // 项目已存在
+  // project is already exist
   if (fs.pathExistsSync(projectPath)) {
     console.error(`${projectName} is exists!`);
     process.exit(1);
@@ -26,7 +26,7 @@ const main = async (name: string) => {
     { useOra: true },
   );
 
-  // 修改package.json 中 name 的值为新的 projectName
+  // edit package.json file, update name to projectName
   const pkgJsonPath = join(CWD, projectName, 'package.json');
   if (fs.pathExistsSync(pkgJsonPath)) {
     const pkgJsonStr = await fs.readFile(pkgJsonPath, 'utf8');
@@ -36,7 +36,7 @@ const main = async (name: string) => {
     }
   }
 
-  // 是否需要安装依赖
+  // if need install dependencies
   if (fs.pathExistsSync(projectPath)) {
     const isNeedInstall = await InquirerHelper.confirm(`Auto install for "${projectName}"?`);
     if (isNeedInstall) {

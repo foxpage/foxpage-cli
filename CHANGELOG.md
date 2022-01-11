@@ -2,36 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [0.1.29](https://github.com/foxfamily/foxpage-cli/compare/v0.1.28...v0.1.29) (2021-12-28)
-
-
-### Features
-
-* 🎸 foxpage.json add schema data ([7b00b02](https://github.com/foxfamily/foxpage-cli/commit/7b00b02492697c72d1907fd14d18abdba1ba313e))
-
-### [0.1.28](https://github.com/foxfamily/foxpage-cli/compare/v0.1.27...v0.1.28) (2021-12-22)
-
-
-### Bug Fixes
-
-* 🐛 update foxpage-component-webpack to fix assets build err ([7f297b2](https://github.com/foxfamily/foxpage-cli/commit/7f297b207c77a094edbc6a184ae499459aa8104f))
-
-### [0.1.27](https://github.com/foxfamily/foxpage-cli/compare/v0.1.26...v0.1.27) (2021-12-22)
-
-
-### Bug Fixes
-
-* 🐛 add error catch for mode build ([c1fc234](https://github.com/foxfamily/foxpage-cli/commit/c1fc23441222093e22424b8de75e42c6294b36c2))
-
-### [0.1.26](https://github.com/foxfamily/foxpage-cli/compare/v0.1.25...v0.1.26) (2021-12-18)
-
+### [0.1.29](https://github.com/foxpage/foxpage-cli/compare/v0.1.28...v0.1.29) (2021-12-28)
 
 ### Features
 
-* 🎸 add dirName for dist/foxpage.json ([1723797](https://github.com/foxfamily/foxpage-cli/commit/1723797c3464adfa1e642b075697b69d2173d956))
-* 🎸 support --manifest option for build --foxpage ([be532a2](https://github.com/foxfamily/foxpage-cli/commit/be532a22af3319a23216eb858d84328809b2adf2))
+- 🎸 foxpage.json add schema data ([7b00b02](https://github.com/foxpage/foxpage-cli/commit/7b00b02492697c72d1907fd14d18abdba1ba313e))
 
+### [0.1.28](https://github.com/foxpage/foxpage-cli/compare/v0.1.27...v0.1.28) (2021-12-22)
 
 ### Bug Fixes
 
-* 🐛 enable changelog ([bf91de3](https://github.com/foxfamily/foxpage-cli/commit/bf91de30256eaa8983542a4aab12ace1a02046f0))
+- 🐛 update foxpage-component-webpack to fix assets build err ([7f297b2](https://github.com/foxpage/foxpage-cli/commit/7f297b207c77a094edbc6a184ae499459aa8104f))
+
+### [0.1.27](https://github.com/foxpage/foxpage-cli/compare/v0.1.26...v0.1.27) (2021-12-22)
+
+### Bug Fixes
+
+- 🐛 add error catch for mode build ([c1fc234](https://github.com/foxpage/foxpage-cli/commit/c1fc23441222093e22424b8de75e42c6294b36c2))
+
+### [0.1.26](https://github.com/foxpage/foxpage-cli/compare/v0.1.25...v0.1.26) (2021-12-18)
+
+### Features
+
+- 🎸 add dirName for dist/foxpage.json ([1723797](https://github.com/foxpage/foxpage-cli/commit/1723797c3464adfa1e642b075697b69d2173d956))
+- 🎸 support --manifest option for build --foxpage ([be532a2](https://github.com/foxpage/foxpage-cli/commit/be532a22af3319a23216eb858d84328809b2adf2))
+
+### Bug Fixes
+
+- 🐛 enable changelog ([bf91de3](https://github.com/foxpage/foxpage-cli/commit/bf91de30256eaa8983542a4aab12ace1a02046f0))

@@ -1,11 +1,3 @@
-/*
- * @Author: j.yangf
- * @Date: 2021-10-11 14:54:51
- * @LastEditors: j.yangf
- * @LastEditTime: 2021-10-12 14:48:17
- * @Description: command tool function
- */
-
 import execa from 'execa';
 
 const IS_WIN = process.platform === 'win32';

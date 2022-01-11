@@ -1,7 +1,7 @@
 import { cpus } from 'os';
 import { EventEmitter } from 'events';
-import { WorkerAgent } from './agent';
 import { logger } from '@foxpage/foxpage-component-shared';
+import { WorkerAgent } from './agent';
 
 const max = cpus().length - 1;
 

@@ -16,7 +16,7 @@ const validList = [
     validator: checkRequired,
     errInfo: '[foxpage.json] Error: name is undefined!',
   },
-  // 无需 group
+  // no need group
   // {
   //   path: "foxpageData.group",
   //   validator: checkRequired,
