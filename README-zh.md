@@ -1,37 +1,37 @@
 # @foxpage/foxpage-cli
 
-a `CLI` tool for [foxpage](https://github.com/foxpage)
+`foxpage` 开源项目脚手架工具.
 
-## 🖥 Environment Support
+## 🖥 环境支持
 
 [![Minimum node.js version](https://img.shields.io/badge/node-%3E%3D12.14.1-brightgreen)](https://img.shields.io/badge/node-%3E%3D12.14.1-brightgreen)
 [![typescript version](https://img.shields.io/badge/typescript-%3E%3D4.0.0-brightgreen)](https://img.shields.io/badge/typescript-%3E%3D4.0.0-brightgreen)
 [![yarn](https://img.shields.io/badge/yarn-1.22.5-blue)](https://img.shields.io/badge/yarn-1.22.5-blue)
 
-## ⌨️ Usage
+## 使用方式
 
-The root level command is `foxpage`:
+脚手架一级指令是 `foxpage`:
 
 ```sh
-# see version
+# 查看版本
 foxpage -v
 
-# get help
+# 获取帮助提示
 foxpage -h
 ```
 
-The secondary level command is `cmpt` and `server`:
+二级指令目前分为 `cmpt` `server` 两类。
 
-- `cmpt`: Component-related, including component resource building, component creation, component template maintenance, creating componentized projects
-- `server`: System level project related. Currently includes pulling and installing all system-level items, but more functionality will be added in the future
+- `cmpt`: 组件相关, 包含组件资源构建, 组件新建, 组件模板维护, 创建组件化项目
+- `server`: 系统级项目相关, 目前包含所以系统级别项目的拉取、安装, 未来会增加更多的功能
 
-### foxpage-cmpt
+## foxpage-cmpt
 
-An instruction tool that handles component-related processes. Include `build`, `project`, `package` command:
+处理组件相关的流程的指令工具, 下一级指令分为 `build`, `project`, `package`,
 
-- `foxpage-cmpt build`: Building component resources, Detailed build parameters can be viewed `foxpage-cmpt build -h`
-- `foxpage-cmpt project`: Create a componentized project. Used with command `foxpage-cmpt project my-project`
-- `foxpage-cmpt package`: Currently, only the new component function is included. The following functions may be expanded according to user requirements, Used with command `foxpage-cpmt project new`
+- `foxpage-cmpt build`: 构建组件资源, 详细构建参数可通过 `foxpage-cmpt build -h` 查看
+- `foxpage-cmpt project`: 新建组件化项目, 通过指令 `foxpage-cmpt project my-project` 创建组件化模板项目
+- `foxpage-cmpt package`: 目前仅包含新建组件功能, 后面功能上可能会根据用户需求做一些扩展, 目前可通过 `foxpage-cpmt project new` 根据选择的模板新建组件
 
 ```sh
 foxpage-cmpt -h
@@ -51,11 +51,9 @@ foxpage-cmpt -h
 
 ### foxpage-cmpt build
 
-Resource builds of components.
-Resources in the `/dist` directory are registered for the FoxPage platform
-Resources in the `/es` and `/lib` directory are used for NPM repository publishing component package resources
+对组件进行资源构建, `/dist` 目录下的资源用于 foxpage 平台进行注册, `/es` `/lib` 目录下的资源用于 npm 仓库发布组件组件包资源
 
-Command option details:
+详细构建参数如下:
 
 ```sh
 foxpage-cmpt build -h
@@ -92,15 +90,13 @@ foxpage-cmpt build -h
 
 ### foxpage-cmpt project
 
-Create a component development project.
-
-For example, create a component project called `foxpage-component-trip-sales` as follows:
+创建组件开发项目, 例如创建一个名叫 `foxpage-component-trip-sales` 的组件项目方式如下:
 
 ```sh
 foxpage-cmpt project trip-sales
 ```
 
-Command option details:
+详细构建参数如下:
 
 ```sh
 foxpage-cmpt project -h
@@ -112,7 +108,7 @@ foxpage-cmpt project -h
 
 ### foxpage-cmpt package
 
-Command option details:
+详细构建参数如下:
 
 ```sh
 foxpage-cmpt package -h
@@ -139,7 +135,7 @@ foxpage-cmpt package new -h
 
 ## foxpage-serve
 
-Command option details:
+详细构建参数如下:
 
 ```sh
 foxpage-server -h
@@ -158,7 +154,7 @@ foxpage-server -h
 
 ### foxpage-server fetch
 
-Pull all projects that need to be started or deployed:
+拉取 `foxpage` 所有需要启动或部署的项目, 方式如下:
 
 ```sh
 foxpage-server fetch
@@ -166,7 +162,7 @@ foxpage-server fetch
 
 ### foxpage-server install
 
-Install dependencies for all projects:
+为所有项目安装依赖, 方式如下:
 
 ```sh
 foxpage-server install
