@@ -11,14 +11,17 @@ const DefaultConcurrency = Math.min(DefaultMaxConcurrency, Math.max(cpus().lengt
 program
   .name('foxpage-cmpt-build')
   // main process
-  .option('-F, --foxpage', 'Build umd for foxpage')
-  .option('-FR, --foxpage-root', 'Build umd for foxpage in root')
-  .option('-L, --lib', 'Build lib(cjs) for npm')
-  .option('-E, --es-module', 'Build es(es-module) for npm')
-  .option('-S, --schema-md', 'Build schema.md to describe the api of component')
+  .option('--foxpage', 'Build umd for foxpage')
+  .option('--foxpage-root', 'Build umd for foxpage in root')
+  .option('--umd', 'Build umd')
+  .option('--cjs', 'Build cjs')
+  .option('--lib', 'Build lib(cjs) for npm')
+  .option('--es-module', 'Build es(es-module) for npm')
+  .option('--schema-md', 'Build schema.md to describe the api of component')
   // common
   .option('--clean', 'Clean dist directory', true)
   .option('--no-clean', 'Set --clean to false')
+  .option('--output <output>', 'output path')
   .option('--assets-hash', 'Build files in assets using the WebPack Contenthash parameter')
   .option('--debug', 'Debug: some temp file or data will be retained')
   // foxpage-root
@@ -37,7 +40,7 @@ program
     val => Number(val) || DefaultConcurrency,
     DefaultConcurrency,
   )
-  // foxpage
+  // umd, cjs, foxpage
   .option(
     '--modes <modes>',
     'Build modes, includes: "production,debug,node,editor", split by ",", (only support --foxpage)',
@@ -46,7 +49,13 @@ program
   .option('--manifest', 'generate manifest.json. used with --file-hash')
   .option('--file-hash', 'Build all files using the WebPack Contenthash parameter')
   .option('--progress-plugin', 'Use webpack.ProgressPlugin when webpack build')
-  .option('--analyze', 'Analyze build result. can be used with "--modes production" (only support --foxpage)', false)
+  .option(
+    '--analyze',
+    'use webpack-bundle-analyzer to analyze webpack output files. (only support --umd, --cjs, --foxpage)',
+    false,
+  )
+  .option('--css-in-js', 'use style loader to include style in js file(only support: --foxpage --umd)')
+  // foxpage only
   .option('--generate-foxpage-json', 'generate foxpage.json file', true)
   .option('--on-generate-foxpage-json', 'disable generate foxpage.json file')
   .option(
@@ -54,6 +63,7 @@ program
     'Automatically compress build resources for the FoxPage component registration process, (only support --foxpage)',
   )
   .option('--no-zip-fox', 'Set --zip to false')
+  .option('--zip-fox-output <zipFoxOutput>', 'the output path of zip-fox')
   // es/lib
   .option('--babel-options <babelOptions>', 'Customer babel cli options, (only support --es/lib)')
   .option('--ts-declaration', 'Generate typescript declaration (*.d.ts), (only support --es/lib)', true)

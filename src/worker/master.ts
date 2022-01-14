@@ -19,7 +19,7 @@ export class Master<T extends Fn> extends EventEmitter {
   constructor(ctx: Omit<WorkContext, 'args'>) {
     super();
     this.jobs = [];
-    this.pool = new WorkerPool();
+    this.pool = new WorkerPool(ctx.size);
     this.context = ctx;
   }
 

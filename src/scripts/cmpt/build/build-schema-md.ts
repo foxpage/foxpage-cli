@@ -5,12 +5,13 @@ import { FoxpageBuildOption } from './typing';
 import { generateSchemaJson } from './compile-schema';
 import { getCompileOption } from './compile-option';
 import writeSchemaMd from './compile-schema-md';
+import { Constants } from './constants';
 
 const buildSchemaMd = async (option: FoxpageBuildOption) => {
-  const { context, clean, debug } = option;
+  const { context, clean, debug, output } = option;
   logger.info('[foxpage cli]: build schema.md');
   if (clean) {
-    fs.removeSync(join(context, 'schema.md'));
+    fs.removeSync(join(output, Constants.schemaMdFilename));
   }
   const compileOption = await getCompileOption(option);
 
@@ -24,7 +25,7 @@ const buildSchemaMd = async (option: FoxpageBuildOption) => {
 
   const { status } = await writeSchemaMd({
     schema,
-    output: join(context, 'schema.md'),
+    output: join(output, Constants.schemaMdFilename),
     name: 'Component',
   });
 

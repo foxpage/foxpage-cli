@@ -1,76 +1,49 @@
 import fs from 'fs-extra';
-import { join } from 'path';
+import { join, basename, isAbsolute } from 'path';
 import ora from 'ora';
 import AdmZip from 'adm-zip';
 import filenamify from 'filenamify';
 import { logger } from '@foxpage/foxpage-component-shared';
-import { buildWebpackMode } from './worker';
 import { generateSchemaJson } from './compile-schema';
 import { FoxpageBuildOption, FoxpageBuildCompileOption, FoxpageJson } from './typing';
-import { createWorker } from '../../../worker/master';
 import { getCompileOption } from './compile-option';
+import { Constants } from './constants';
+import buildByModes from './build-by-modes';
 
 const buildFoxpage = async (option: FoxpageBuildOption) => {
   logger.info('start build for foxpage');
-  const { clean, context } = option;
+  const { clean, context, output } = option;
   if (clean) {
-    fs.removeSync(join(context, '/dist'));
+    fs.removeSync(output);
   }
   const compileOption = await getCompileOption(option);
-
-  await buildByModes(context, compileOption);
-  await buildTsSchema(context, compileOption);
-  await handleFoxpageStatic(context, compileOption);
-  logger.success('build for foxpage success...');
-};
-
-const buildByModes = async (context: string, compileOption: FoxpageBuildCompileOption) => {
-  const worker = createWorker<typeof buildWebpackMode>({
-    filename: join(__dirname, 'worker'),
-    exportName: 'buildWebpackMode',
-  });
   const whiteModes: FoxpageBuildCompileOption['modes'] = ['production', 'node', 'debug', 'editor'];
   const { modes = [] } = compileOption;
   const targetModes = modes && modes.length > 0 ? modes : whiteModes;
-  logger.info(`start build by modes: ${targetModes.join(', ')}`);
-  targetModes.forEach(mode => {
-    if (whiteModes.includes(mode)) {
-      worker.addJob({
-        args: [mode, context, compileOption],
-      });
-    }
+  await buildByModes({
+    modes: targetModes,
+    whiteModes,
+    context,
+    compileOption,
   });
-  const resList = await worker.run();
-  worker.destroy();
-  let success = true;
-  resList.forEach((res, ind) => {
-    const modeName = res.args?.[0] || targetModes[ind];
-    if (res.ok) {
-      logger.success(`build ${modeName} mode...`);
-    } else {
-      logger.error(`build ${modeName} mode fail!`);
-      success = false;
-    }
-  });
-  if (!success) {
-    process.exit(1);
-  }
-  logger.success('build by modes success...');
+  await buildTsSchema(context, compileOption);
+  await handleFoxpageStatic(context, compileOption);
+  logger.success('build for foxpage success...');
 };
 
 const buildTsSchema = async (context: string, compileOption: FoxpageBuildCompileOption) => {
   const schema = await generateSchemaJson({
     context,
     name: compileOption.foxpageData.name,
-    output: join(context, 'dist/schema.json'),
+    output: join(compileOption.output, Constants.schemaJsonFilename),
   });
   // set schema
   compileOption.foxpageData.foxpage.schema = schema;
 };
 
 const handleFoxpageStatic = async (context: string, compileOption: FoxpageBuildCompileOption) => {
-  logger.info('generate foxpage.json...');
-  const { generateFoxpageJson, foxpageData } = compileOption;
+  logger.info(`generate ${Constants.foxpageJsonFilename}...`);
+  const { generateFoxpageJson, foxpageData, output } = compileOption;
   const { name: pkgName, version: pkgVersion, foxpage: pkgFoxpage = {} } = foxpageData || ({} as FoxpageJson);
   const {
     name,
@@ -101,29 +74,38 @@ const handleFoxpageStatic = async (context: string, compileOption: FoxpageBuildC
   // generate foxpage.json
   if (generateFoxpageJson) {
     await fs
-      .writeJson(join(context, 'dist/foxpage.json'), foxpageJson)
+      .writeJson(join(output, Constants.foxpageJsonFilename), foxpageJson)
       .then(() => {
-        logger.success('generate foxpage.json...');
+        logger.success(`generate ${Constants.foxpageJsonFilename}...`);
       })
       .catch(e => {
         logger.error(e.message);
-        logger.error('generate foxpage.json...');
+        logger.error(`generate ${Constants.foxpageJsonFilename}...`);
         return false;
       });
   }
 
   // zip dist
   if (compileOption.zipFox) {
+    let zipFoxOutput = compileOption.zipFoxOutput;
+    const outputDirName = basename(output);
+    if (!zipFoxOutput) {
+      zipFoxOutput = join(output, '../', `${outputDirName}${Constants.defaultZipFoxOutputSuffix}`);
+    } else {
+      if (!isAbsolute(zipFoxOutput)) {
+        zipFoxOutput = join(context, zipFoxOutput);
+      }
+    }
     const spinner = ora('generate zip...').start();
     const { name, version } = compileOption.foxpageData;
     const fileName = `${name}@${version}.zip`;
     const goodFileName = filenamify(fileName, { replacement: '-' });
-    spinner.text = `generate dist-zip/${goodFileName}...`;
+    spinner.text = `generate zip/${goodFileName}...`;
     const zip = new AdmZip();
-    zip.addLocalFolder(join(context, '/dist'));
+    zip.addLocalFolder(output);
     zip.addLocalFile(join(context, 'package.json'));
-    zip.writeZip(join(context, `dist-zip/${goodFileName}`));
-    spinner.succeed(`generate dist-zip/${goodFileName}...`);
+    zip.writeZip(join(zipFoxOutput, `${goodFileName}`));
+    spinner.succeed(`generate zip/${goodFileName}...`);
     logger.success('generate zip success...');
   }
 };

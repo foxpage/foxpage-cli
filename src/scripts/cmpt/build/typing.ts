@@ -1,14 +1,19 @@
-import { BuildFoxpageMode } from '@foxpage/foxpage-component-webpack';
+import { BuildMode } from '@foxpage/foxpage-component-webpack';
 
+export type BuildType = 'foxpageRoot' | 'foxpage' | 'umd' | 'cjs' | 'lib' | 'esModule' | 'schemaMd' | 'none';
 export interface FoxpageBuildOption {
   // main process
   foxpageRoot?: boolean;
   foxpage?: boolean;
+  umd?: boolean;
+  cjs?: boolean;
   lib?: boolean;
   esModule?: boolean;
   schemaMd?: boolean;
   // common
   context: string;
+  output: string;
+  buildType: BuildType;
   clean?: boolean;
   assetsHash?: boolean;
   debug?: boolean;
@@ -17,15 +22,17 @@ export interface FoxpageBuildOption {
   npmClient: string;
   maxConcurrency: number;
   concurrency: number;
-  // used for foxpage
-  modes: BuildFoxpageMode[];
+  // used for foxpage, umd, cjs
+  modes: BuildMode[];
   manifest?: boolean;
   fileHash?: boolean;
   progressPlugin?: boolean;
   analyze?: boolean;
-  minimize?: boolean;
+  cssInJs?: boolean;
+  // used for only foxpage
   generateFoxpageJson?: boolean;
   zipFox?: boolean;
+  zipFoxOutput?: string;
   // used for lib es
   babelOptions?: string;
   tsDeclaration?: boolean;

@@ -2,6 +2,7 @@ export interface WorkContext {
   filename: string;
   exportName: string;
   args: any[];
+  size?: number;
 }
 
 export type Message<A extends string, P> = {

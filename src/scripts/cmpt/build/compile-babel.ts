@@ -3,7 +3,7 @@ import { join } from 'path';
 import { FoxpageBuildOption } from './typing';
 
 async function runBabelCompile(option: FoxpageBuildOption) {
-  const { context, esModule = false, removeStyleImport = false, babelOptions = '', debug } = option;
+  const { context, output, esModule = false, removeStyleImport = false, babelOptions = '', debug } = option;
   logger.info('babel compile:');
   setProcessEnv('BUILD_ES_MODULE', esModule ? 'true' : undefined);
   setProcessEnv('BUILD_STYLE', removeStyleImport ? 'remove' : 'false');
@@ -27,7 +27,7 @@ async function runBabelCompile(option: FoxpageBuildOption) {
     '--config-file',
     babelConfigFilePath,
     '--out-dir',
-    join(context, esModule ? 'es' : 'lib'),
+    output,
     '--extensions',
     '.js,.jsx,.ts,.tsx',
     '--copy-files',

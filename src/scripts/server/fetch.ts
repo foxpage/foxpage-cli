@@ -28,7 +28,7 @@ async function fetchProject(name: string) {
 
 async function afterFetch(name: string) {
   // show config
-  logger.colorLog('green', `View documentation: ${Config.configHelpUri}`);
+  logger.colorMsg('green', `View documentation: ${Config.configHelpUri}`);
   const isOpenDoc = await InquirerHelper.confirm('Go to doc immediately? (default: false)', false);
   if (isOpenDoc) await open(Config.configHelpUri);
   // check if need install
@@ -39,7 +39,7 @@ async function afterFetch(name: string) {
       cwd: path.join(process.cwd(), name),
     });
   } else {
-    logger.colorLog('green', `Run "cd ${name} && foxpage server install" to install dependencies by yourself.`);
+    logger.colorMsg('green', `Run "cd ${name} && foxpage server install" to install dependencies by yourself.`);
   }
 }
 
