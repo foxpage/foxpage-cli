@@ -6,6 +6,7 @@ import { createWorker } from '../../../worker/master';
 
 interface BuildByModes {
   modes: FoxpageBuildCompileOption['modes'];
+  ignoreModes?: FoxpageBuildCompileOption['modes'];
   whiteModes?: FoxpageBuildCompileOption['modes'];
   context: string;
   compileOption: FoxpageBuildCompileOption;
@@ -13,6 +14,7 @@ interface BuildByModes {
 
 const buildByModes: (arg0: BuildByModes) => Promise<void> = async ({
   modes,
+  ignoreModes = [],
   whiteModes = [],
   context,
   compileOption,
@@ -24,13 +26,23 @@ const buildByModes: (arg0: BuildByModes) => Promise<void> = async ({
     // analyze use the modes's length as the worker agent size
     size: analyze ? modes.length : undefined,
   });
-  logger.info(`start build by modes: ${modes.join(', ')}`);
+  const tarModes: FoxpageBuildCompileOption['modes'] = [];
   modes.forEach(mode => {
-    if (!(whiteModes.length > 0) || whiteModes.includes(mode)) {
-      worker.addJob({
-        args: [mode, context, compileOption],
-      });
+    const isInWhiteModes = !(whiteModes.length > 0) || whiteModes.includes(mode);
+    const isInIgnoreModes = ignoreModes.includes(mode);
+    if (!isInWhiteModes) {
+      logger.warn(`${mode} is not in whiteModes: ${whiteModes.join(', ')}`);
+    } else if (isInIgnoreModes) {
+      logger.colorMsg('grey', `ignore mode: ${mode}`);
+    } else {
+      tarModes.push(mode);
     }
+  });
+  logger.info(`start build by modes: ${tarModes.join(', ')}`);
+  tarModes.forEach(mode => {
+    worker.addJob({
+      args: [mode, context, compileOption],
+    });
   });
   const resList = await worker.run();
   worker.destroy();

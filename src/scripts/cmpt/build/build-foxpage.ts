@@ -18,11 +18,12 @@ const buildFoxpage = async (option: FoxpageBuildOption) => {
   }
   const compileOption = await getCompileOption(option);
   const whiteModes: FoxpageBuildCompileOption['modes'] = ['production', 'node', 'debug', 'editor'];
-  const { modes = [] } = compileOption;
+  const { modes = [], ignoreModes } = compileOption;
   const targetModes = modes && modes.length > 0 ? modes : whiteModes;
   await buildByModes({
     modes: targetModes,
     whiteModes,
+    ignoreModes,
     context,
     compileOption,
   });

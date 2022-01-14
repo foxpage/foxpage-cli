@@ -43,9 +43,10 @@ program
   // umd, cjs, foxpage
   .option(
     '--modes <modes>',
-    'Build modes, includes: "production,debug,node,editor", split by ",", (only support --foxpage)',
+    'Build modes, foxpage: "production,debug,node,editor", umd: "umd_prod, umd_dev", cjs: "cjs_prod, cjs_dev". please split by ","',
     v => v.split(','),
   )
+  .option('--ignore-modes <ignoreModes>', 'ignore modes. please split by ","', v => v.split(','))
   .option('--manifest', 'generate manifest.json. used with --file-hash')
   .option('--file-hash', 'Build all files using the WebPack Contenthash parameter')
   .option('--progress-plugin', 'Use webpack.ProgressPlugin when webpack build')

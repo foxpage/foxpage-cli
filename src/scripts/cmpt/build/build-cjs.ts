@@ -12,11 +12,12 @@ const buildCjs = async (option: FoxpageBuildOption) => {
   }
   const compileOption = await getCompileOption(option);
   const whiteModes: FoxpageBuildCompileOption['modes'] = ['cjs_prod', 'cjs_dev'];
-  const { modes = [] } = compileOption;
+  const { modes = [], ignoreModes } = compileOption;
   const targetModes = modes && modes.length > 0 ? modes : whiteModes;
   await buildByModes({
     modes: targetModes,
     whiteModes,
+    ignoreModes,
     context,
     compileOption,
   });
