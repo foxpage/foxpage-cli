@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/foxpage/foxpage-cli/compare/v0.1.30...v0.2.0) (2022-01-14)
+
+
+### Features
+
+* 🎸 support --umd, cjs, output, analyze, cssinjs  options ([0f332e9](https://github.com/foxpage/foxpage-cli/commit/0f332e9827c710081b8eb0a3adbe82b639b39516))
+
 ### [0.1.30](https://github.com/foxpage/foxpage-cli/compare/v0.1.29...v0.1.30) (2022-01-11)
 
 
