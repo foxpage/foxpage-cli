@@ -1,9 +1,21 @@
 import { BuildMode } from '@foxpage/foxpage-component-webpack';
 
-export type BuildType = 'foxpageRoot' | 'foxpage' | 'umd' | 'cjs' | 'lib' | 'esModule' | 'schemaMd' | 'none';
+export type BuildType =
+  | 'foxpageRoot'
+  | 'umdRoot'
+  | 'cjsRoot'
+  | 'foxpage'
+  | 'umd'
+  | 'cjs'
+  | 'lib'
+  | 'esModule'
+  | 'schemaMd'
+  | 'none';
 export interface FoxpageBuildOption {
   // main process
   foxpageRoot?: boolean;
+  umdRoot?: boolean;
+  cjsRoot?: boolean;
   foxpage?: boolean;
   umd?: boolean;
   cjs?: boolean;
@@ -65,3 +77,14 @@ export interface FoxpageJson {
 export interface FoxpageBuildCompileOption extends FoxpageBuildOption {
   foxpageData: FoxpageJson;
 }
+
+export type PackageHashMap = Record<string, string>;
+
+export interface PackageDataType {
+  name: string;
+  pkgName: string;
+  hash: string;
+  packagePath: string;
+  useCache: boolean;
+}
+export type PackagesDataType = PackageDataType[];

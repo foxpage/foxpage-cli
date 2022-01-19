@@ -2,27 +2,29 @@ import fs from 'fs-extra';
 import { join, basename } from 'path';
 import pMap from 'p-map';
 import { logger } from '@foxpage/foxpage-component-shared';
-import { FoxpageBuildOption } from '../typing';
+import { FoxpageBuildOption } from './typing';
 import {
-  generateDistPackageHashMap,
+  generatePackageHashMap,
   generateFoxpagesJson,
   generatePackagesData,
-  generatePackagesDist,
+  generatePackagesResource,
   generatePackagesPath,
-} from './generator';
+} from './root-generator';
 import { Constants } from './constants';
 
 const buildFoxpageRoot = async (option: FoxpageBuildOption) => {
-  logger.info(`start build for <root>/${Constants.rootDistPath}`);
+  const { buildType } = option;
+  logger.info(`start build for ${buildType}`);
   // force update concurrency
   option.concurrency = Math.min(option.maxConcurrency, option.concurrency);
-  const { clean, context, rootCache, npmClient, concurrency } = option;
+  const { clean, context, output, rootCache, npmClient, concurrency } = option;
   if (!rootCache) {
-    fs.removeSync(join(context, Constants.rootDistPath));
+    fs.removeSync(output);
   }
   const packagesPath = await generatePackagesPath({ context });
-  const distPackageHashMap = await generateDistPackageHashMap({
-    context,
+  const packagesHashMap = await generatePackageHashMap({
+    output,
+    cacheFilePath: join(context, `${Constants.rootFoxpageCacheFilePath}`),
     clean: Boolean(clean),
     packagesPath,
     concurrency,
@@ -30,7 +32,7 @@ const buildFoxpageRoot = async (option: FoxpageBuildOption) => {
   const packagesData = await generatePackagesData({
     useCache: rootCache,
     packagesPath,
-    distPackageHashMap,
+    packagesHashMap,
     concurrency,
   });
   if (!packagesData || packagesData.length < 1) {
@@ -42,13 +44,14 @@ const buildFoxpageRoot = async (option: FoxpageBuildOption) => {
     logger.info('All package is in cache!');
     return;
   }
-  const { pkgBuildStatusMap } = await generatePackagesDist({
+  const { pkgBuildStatusMap } = await generatePackagesResource({
     npmClient,
+    commandKeyword: 'foxpage',
     packagesData: unCachePackagesData,
     concurrency,
   });
-  const newDistPackageHashMap = {
-    ...distPackageHashMap,
+  const newPackagesHashMap = {
+    ...packagesHashMap,
   };
   // move <package>/dist to <root>/dist/<package>
   await pMap(
@@ -56,36 +59,30 @@ const buildFoxpageRoot = async (option: FoxpageBuildOption) => {
     async ({ name, hash, packagePath, useCache }) => {
       const packageDir = basename(packagePath);
       if (useCache) {
-        newDistPackageHashMap[name] = hash;
-        logger.info(
-          `The '${packageDir}/dist' use the cache of <root>/${Constants.rootDistComponentPath}/${packageDir}`,
-        );
+        newPackagesHashMap[name] = hash;
+        logger.info(`The '${name}' is in cache`);
       } else if (!pkgBuildStatusMap[name]) {
         logger.error(`Can't copy! Run build:foxpage fail in '<root>/${Constants.packagesPath}/${packageDir}'!`);
       } else {
+        // the 'dist' will changed by --output(build:foxpage)? (wait to fix it)
         const source = join(packagePath, 'dist');
-        const target = join(packagePath, `../../${Constants.rootDistComponentPath}/${packageDir}`);
+        const target = join(output, `${Constants.outputCompDirName}/${packageDir}`);
         if (await fs.pathExists(target)) {
           await fs
             .remove(target)
-            .then(() => {
-              logger.success(`Remove <root>/${Constants.rootDistComponentPath}/${packageDir} success!`);
-            })
+            .then()
             .catch(err => {
-              logger.error(`Remove <root>/${Constants.rootDistComponentPath}/${packageDir} error!`);
+              logger.error(`Clear ${target} error!`);
               console.error(err);
             });
         }
         await fs
           .copy(source, target)
           .then(() => {
-            logger.success(
-              `Copy ${packageDir}/dist to <root>/${Constants.rootDistComponentPath}/${packageDir} success!`,
-            );
-            newDistPackageHashMap[name] = hash;
+            newPackagesHashMap[name] = hash;
           })
           .catch(err => {
-            logger.error(`Copy ${packageDir}/dist to <root>/${Constants.rootDistComponentPath}/${packageDir} error!`);
+            logger.error(`Generate "${target}" error!`);
             console.error(err);
           });
       }
@@ -95,22 +92,22 @@ const buildFoxpageRoot = async (option: FoxpageBuildOption) => {
     },
   );
   // generate foxpages.json
-  await generateFoxpagesJson({ context });
+  await generateFoxpagesJson({ context, output });
 
-  // generate new dist packages hash file
+  // generate new hash cache file
   await fs
-    .outputJSON(join(context, Constants.rootCacheFilePath), newDistPackageHashMap, {
+    .outputJSON(join(context, Constants.rootFoxpageCacheFilePath), newPackagesHashMap, {
       spaces: 2,
     })
     .then(() => {
-      logger.success(`Generate '${Constants.rootCacheFilePath}' success!`);
+      logger.success(`Generate '${Constants.rootFoxpageCacheFilePath}' success!`);
     })
     .catch(err => {
-      logger.error(`Generate '${Constants.rootCacheFilePath}' error!`);
+      logger.error(`Generate '${Constants.rootFoxpageCacheFilePath}' error!`);
       console.error(err);
     });
 
-  logger.success(`Build for <root>/${Constants.rootDistPath} success...`);
+  logger.success(`Build for ${buildType} success...`);
 };
 
 export default buildFoxpageRoot;

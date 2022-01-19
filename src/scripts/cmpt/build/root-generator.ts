@@ -9,10 +9,10 @@ import pMap from 'p-map';
 import pFilter from 'p-filter';
 import logTransformer from 'strong-log-transformer';
 import { logger, readPackageInfo } from '@foxpage/foxpage-component-shared';
-import { PackageDataType, PackageHashMap, PackagesDataType } from './interface';
+import { PackageDataType, PackageHashMap, PackagesDataType } from './typing';
 import { Constants, FolderHashOptions } from './constants';
-import { getUniqueColorChalk } from '../../../../utils/chalk-color';
-import { getFoxpageData } from '../utils';
+import { getUniqueColorChalk } from '../../../utils/chalk-color';
+import { getFoxpageData } from './utils';
 
 export const generatePackagesPath = async ({ context }: { context: string }) => {
   const packagesPath = await globby(`${Constants.packagesPath}/*`, {
@@ -37,48 +37,48 @@ export const generatePackagesPath = async ({ context }: { context: string }) => 
  * 1. get hashMap of packages
  * 2. clean the expired 'root/dist/component/<package>'
  */
-export const generateDistPackageHashMap = async ({
-  context,
+export const generatePackageHashMap = async ({
+  output,
+  cacheFilePath,
   clean,
   packagesPath = [],
   concurrency,
 }: {
-  context: string;
+  output: string;
+  cacheFilePath: string;
   clean: boolean;
   packagesPath: string[];
   concurrency: number;
 }): Promise<PackageHashMap> => {
-  let distPackageHashMap: PackageHashMap = {};
-  // get packages hashMap by cache file;
-  const cacheFilePath = join(context, Constants.rootCacheFilePath);
-  const packageDirs = packagesPath.map((packagePath: string) => basename(packagePath));
+  let packagesHashMap: PackageHashMap = {};
+  const packageDirNames = packagesPath.map((packagePath: string) => basename(packagePath));
   if (await fs.pathExists(cacheFilePath)) {
     await fs
       .readJson(cacheFilePath)
-      .then((json = {}) => (distPackageHashMap = json))
+      .then((json = {}) => (packagesHashMap = json))
       .catch(err => {
-        logger.error(`Read '${Constants.rootCacheFilePath}' error!`);
+        logger.error(`Read '${cacheFilePath}' error!`);
         console.error(err);
       });
-    // Make sure the distPackageHashMap is correct!
+    // Make sure the packagesHashMap is correct!
     await pMap(
-      Object.keys(distPackageHashMap),
+      Object.keys(packagesHashMap),
       async (key: string) => {
         // delete invalid key
-        if (!packageDirs.includes(key)) {
-          delete distPackageHashMap[key];
+        if (!packageDirNames.includes(key)) {
+          delete packagesHashMap[key];
           return;
         }
-        // parse and valid '<root>/dist/component/<package>' is exist and no empty, otherwise delete the  hash of package
-        const cachePackagePath = join(context, `${Constants.rootDistComponentPath}/${key}`);
-        const isInCache =
+        // parse and valid '${output}/${outputCompDirName}/<package>' is exist and no empty, otherwise delete the hash of package
+        const cachePackagePath = join(output, `${Constants.outputCompDirName}/${key}`);
+        const isOutCache =
           (
             await fs.readdir(cachePackagePath).catch(() => {
               return [];
             })
           ).length === 0;
-        if (isInCache) {
-          delete distPackageHashMap[key];
+        if (isOutCache) {
+          delete packagesHashMap[key];
           return;
         }
       },
@@ -88,18 +88,18 @@ export const generateDistPackageHashMap = async ({
     );
   }
   if (clean) {
-    const distPackages = await globby(`${Constants.rootDistComponentPath}/*`, {
-      cwd: context,
+    const outputPackageDirNames = await globby(`${Constants.outputCompDirName}/*`, {
+      cwd: output,
       onlyDirectories: true,
     }).then((dirs: string[]) => {
       return dirs.map((dir: string) => basename(dir));
     });
     // delete invalid "component/<package>" of "root/dist";
     await pMap(
-      distPackages,
+      outputPackageDirNames,
       async (name: string) => {
-        if (!packageDirs.includes(name)) {
-          fs.remove(join(context, `${Constants.rootDistComponentPath}/${name}`));
+        if (!packageDirNames.includes(name)) {
+          fs.remove(join(output, `${Constants.outputCompDirName}/${name}`));
         }
       },
       {
@@ -107,18 +107,18 @@ export const generateDistPackageHashMap = async ({
       },
     );
   }
-  return distPackageHashMap;
+  return packagesHashMap;
 };
 
 export const generatePackagesData = async ({
   useCache,
   packagesPath = [],
-  distPackageHashMap = {},
+  packagesHashMap = {},
   concurrency,
 }: {
   useCache: boolean;
   packagesPath: string[];
-  distPackageHashMap: PackageHashMap;
+  packagesHashMap: PackageHashMap;
   concurrency: number;
 }): Promise<PackagesDataType> => {
   const packagesData: PackagesDataType = [];
@@ -139,7 +139,7 @@ export const generatePackagesData = async ({
             pkgName,
             hash: contentHash,
             packagePath,
-            useCache: useCache && distPackageHashMap[name] === contentHash,
+            useCache: useCache && packagesHashMap[name] === contentHash,
           });
         })
         .catch(e => {
@@ -153,12 +153,14 @@ export const generatePackagesData = async ({
   return packagesData;
 };
 
-export const generatePackagesDist = async ({
-  npmClient = 'npm',
+export const generatePackagesResource = async ({
+  npmClient,
+  commandKeyword,
   packagesData = [],
   concurrency,
 }: {
   npmClient: string;
+  commandKeyword: string;
   packagesData: PackageDataType[];
   concurrency: number;
 }) => {
@@ -168,7 +170,7 @@ export const generatePackagesDist = async ({
       const { name, packagePath } = pkg;
       const colorName = getUniqueColorChalk(name);
       try {
-        const command = `${npmClient} run build:foxpage`;
+        const command = `${npmClient} run build:${commandKeyword}`;
         const spawned = execa.command(command, {
           cwd: packagePath,
         });
@@ -222,7 +224,7 @@ export const generatePackagesDist = async ({
     },
   );
   const resultMap: Record<string, boolean> = {};
-  logger.colorMsg('grey', '------[foxpage components build results:]------');
+  logger.colorMsg('grey', `------[build results]:------`);
   result.forEach(item => {
     const { isSuc, name, colorName, message } = item;
     resultMap[name] = isSuc;
@@ -234,7 +236,7 @@ export const generatePackagesDist = async ({
       logger.error(`FoxpageBuild ${colorName} fail message end!`);
     }
   });
-  logger.colorMsg('grey', '------[foxpage components build results end]------');
+  logger.colorMsg('grey', `------[build results end]------`);
   return {
     pkgBuildStatusList: result,
     pkgBuildStatusMap: resultMap,
@@ -242,9 +244,9 @@ export const generatePackagesDist = async ({
 };
 
 // generate foxpages.json
-export const generateFoxpagesJson = async ({ context }: { context: string }) => {
-  const packageJsonPaths = await globby(`${Constants.rootDistComponentPath}/*/foxpage.json`, {
-    cwd: context,
+export const generateFoxpagesJson = async ({ context, output }: { context: string; output: string }) => {
+  const packageJsonPaths = await globby(`${Constants.outputCompDirName}/*/foxpage.json`, {
+    cwd: output,
     absolute: true,
   });
   const rootFoxpageInfo = await fs
@@ -269,7 +271,7 @@ export const generateFoxpagesJson = async ({ context }: { context: string }) => 
     }
   });
   await fs
-    .writeJson(`${Constants.rootDistPath}/foxpages.json`, foxpagesJson)
+    .writeJson(`${output}/foxpages.json`, foxpagesJson)
     .then(() => {
       logger.success('generate foxpages.json');
     })

@@ -11,10 +11,12 @@ const DefaultConcurrency = Math.min(DefaultMaxConcurrency, Math.max(cpus().lengt
 program
   .name('foxpage-cmpt-build')
   // main process
-  .option('--foxpage', 'Build umd for foxpage')
-  .option('--foxpage-root', 'Build umd for foxpage in root')
+  .option('--foxpage', 'Build for foxpage')
+  .option('--foxpage-root', 'Build foxpage in root')
   .option('--umd', 'Build umd')
+  .option('--umd-root', 'Build umd in root')
   .option('--cjs', 'Build cjs')
+  .option('--cjs-root', 'Build cjs in root')
   .option('--lib', 'Build lib(cjs) for npm')
   .option('--es-module', 'Build es(es-module) for npm')
   .option('--schema-md', 'Build schema.md to describe the api of component')

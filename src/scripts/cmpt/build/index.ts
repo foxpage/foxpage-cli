@@ -7,10 +7,14 @@ import buildCjs from './build-cjs';
 import buildLibEsModule from './build-lib-es';
 import buildSchemaMd from './build-schema-md';
 import buildFoxpageRoot from './build-foxpage-root';
+import buildUmdRoot from './build-umd-root';
+import buildCjsRoot from './build-cjs-root';
 import { BuildOutputMap, BuildMap } from './constants';
 
 const MainBuildMap: Record<BuildType, ((arg0: FoxpageBuildOption) => Promise<void>) | undefined> = {
   foxpageRoot: buildFoxpageRoot,
+  umdRoot: buildUmdRoot,
+  cjsRoot: buildCjsRoot,
   foxpage: buildFoxpage,
   umd: buildUmd,
   cjs: buildCjs,
@@ -40,9 +44,13 @@ const mainBuild = async (option: FoxpageBuildOption) => {
 
 const initOptions = async (option: FoxpageBuildOption) => {
   // init buildType
-  const { foxpageRoot, foxpage, umd, cjs, lib, esModule, schemaMd, output } = option;
+  const { foxpageRoot, umdRoot, cjsRoot, foxpage, umd, cjs, lib, esModule, schemaMd, output } = option;
   if (foxpageRoot) {
     option.buildType = BuildMap['foxpageRoot'];
+  } else if (umdRoot) {
+    option.buildType = BuildMap['umdRoot'];
+  } else if (cjsRoot) {
+    option.buildType = BuildMap['cjsRoot'];
   } else if (foxpage) {
     option.buildType = BuildMap['foxpage'];
   } else if (umd) {
