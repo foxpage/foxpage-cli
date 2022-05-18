@@ -9,6 +9,7 @@ import { outputJSONSync } from 'fs-extra';
 import os from 'os';
 import fs from 'fs-extra';
 import cryptoRandomString from 'crypto-random-string';
+import { isWin } from '../../../utils/command-tool';
 
 export interface TypescriptCompileOption extends FoxpageBuildOption {
   output: string;
@@ -101,9 +102,11 @@ async function runTypescriptCompile(option: TypescriptCompileOption) {
   const tmpFilePathIns = generateTypescriptConfig(tsConfigFilePath, option);
 
   try {
-    let tsc = 'tsc';
+    let tsc = 'npx tsc';
     try {
-      tsc = require.resolve('typescript/bin/tsc');
+      if (isWin()) {
+        tsc = require.resolve('typescript/bin/tsc');
+      }
     } catch (e) {}
     execSync(`${tsc} --project ${tmpFilePathIns.filePath}`, {
       cwd: context,
