@@ -104,7 +104,7 @@ async function runTypescriptCompile(option: TypescriptCompileOption) {
   try {
     let tsc = 'npx tsc';
     try {
-      if (isWin()) {
+      if (!isWin()) {
         tsc = require.resolve('typescript/bin/tsc');
       }
     } catch (e) {}
