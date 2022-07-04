@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.2-beta.0](https://github.com/foxpage/foxpage-cli/compare/v0.3.1...v0.3.2-beta.0) (2022-07-04)
+
+
+### Bug Fixes
+
+* 🐛 support node16+ ([0e74a41](https://github.com/foxpage/foxpage-cli/commit/0e74a419659e4b1f5dfb6f6efbc8aa47b0490ca0))
+
 ### [0.3.1](https://github.com/foxpage/foxpage-cli/compare/v0.3.1-beta.1...v0.3.1) (2022-05-18)
 
 ### [0.3.1-beta.1](https://github.com/foxpage/foxpage-cli/compare/v0.3.1-beta.0...v0.3.1-beta.1) (2022-05-18)
